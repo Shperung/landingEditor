@@ -7,36 +7,27 @@ var path = require('path');
 const port = 3012;
 const fs = require("fs");
 
-
-app.use('/test', express.static(__dirname + '/test'));
+app.use('/src', express.static(__dirname + '/src'));
 app.use(bodyParser.json());
 
 
 app.get('/', function(req, res) {
-	fs.readFile("test.html", "utf8", function(error,data){
+	fs.readFile("index.html", "utf8", function(error,data){
 	  res.send(data);
 	});
 });
 
 
-
-
 app.post('/', function(req, res) {
-	console.log('B: ', req.body);
-	console.log('B.text: ', req.body.test);
-	console.log('B.id: ', req.body.id);
-	fs.readFile("test.html", "utf8", function(error,data){
+	fs.readFile("index.html", "utf8", function(error,data){
 		change = data.replace(/<(\w+)\s[^>]*id=\"editable1\"[^>]*>[\s\S]*\1>/gim, req.body.text);
-		console.log('data.change', change);
 
-		fs.writeFile("test.html", change, function(error){ 
+		fs.writeFile("index.html", change, function(error){ 
 			console.log('ok');
 		});
 		
 	});
 });
-
-
 
 
 app.listen(port, () => {
