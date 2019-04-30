@@ -17,7 +17,6 @@ http.createServer(function(req, res){
         if (reqData && text && id) {
           fs.readFile("index.html", "utf8", function(error,data){
             const re = new RegExp('<(\\w+)\\s[^>]*id=\\"'+id+'\\"[^>]*>[\\s\\S]*?\\1>', "gim");
-            console.log('re', re);
             change = data.replace(re, text);
             fs.writeFile("index.html", change, function(error){ 
               console.log('writeFile - ok');
