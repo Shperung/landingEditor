@@ -16,7 +16,7 @@ const editable = document.getElementsByClassName('editable');
       console.log('text:', text);
       
       fetch('http://localhost:3012/', {
-        method: 'post',
+        method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'

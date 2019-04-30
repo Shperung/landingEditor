@@ -1,35 +1,36 @@
 
-
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var path = require('path');
-const port = 3012;
+const http = require('http');
 const fs = require("fs");
+const port = 3012;
 
-app.use('/src', express.static(__dirname + '/src'));
-app.use(bodyParser.json());
-
-
-app.get('/', function(req, res) {
-	fs.readFile("index.html", "utf8", function(error,data){
-	  res.send(data);
-	});
-});
-
-
-app.post('/', function(req, res) {
-	fs.readFile("index.html", "utf8", function(error,data){
-		change = data.replace(/<(\w+)\s[^>]*id=\"editable1\"[^>]*>[\s\S]*\1>/gim, req.body.text);
-
-		fs.writeFile("index.html", change, function(error){ 
-			console.log('ok');
-		});
-		
-	});
-});
-
-
-app.listen(port, () => {
-	console.log(`API starded in http://localhost:${port}/ ..............___`);
+http.createServer(function(req, res){
+	if(req.method == 'POST') {
+      let jsonString = '';
+      req.on('data', function (data) {
+          jsonString += data;
+      });
+      req.on('end', function () {
+        const reqData = JSON.parse(jsonString);
+        console.log('reqData', reqData);
+        const text = reqData.text;
+        const id = reqData.id;
+        if (reqData && text && id) {
+          fs.readFile("index.html", "utf8", function(error,data){
+            change = data.replace(/<(\w+)\s[^>]*id=\"editable1\"[^>]*>[\s\S]*\1>/gim, text);
+            fs.writeFile("index.html", change, function(error){ 
+              console.log('writeFile - ok');
+            });        
+          });
+        }
+      });
+    } else {
+      fs.readFile('index.html',function (err, data){
+        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+        res.write(data);
+        res.end();
+        console.log("get - index.html");        
+      });
+    }
+}).listen(port, () => {
+	console.log(`API starded in http://localhost:${port}/ ...`);
 });

@@ -13,11 +13,16 @@
         padding: 3px;
       }
     </style>
+    
 </head>
 
   <body>
-    <h1 id="editable1" class="editable" contenteditable="false">
-        h888888</h1>
+    <p id="editable2" class="editable" contenteditable="false">
+        Lorem ipsum dolor sit amet consectetur,
+         adipisicing elit. Ad, veniam in tempora voluptatum vel
+          sequi, nulla, corporis nobis eum aliquid molestiae porro
+           culpa doloribus. At eveniet quaerat possimus tempora nulla.
+    </p>
     <p id="editable2" class="editable">
         Lorem ipsum dolor sit amet consectetur,
          adipisicing elit. Ad, veniam in tempora voluptatum vel
@@ -51,4 +56,41 @@
     <br>
 
 
-    <b>jkcccccc</b><script src="src/client.js"></script></body></html>
+    <b>jkcccccc</b>
+    <!-- <script src="src/client.js"></script> -->
+    <script>
+      const editable = document.getElementsByClassName('editable');
+
+      [].forEach.call(editable, function (el) {
+        el.addEventListener('click', function() {    
+          el.setAttribute("contenteditable", true);
+          el.focus();    
+        }, false);
+        el.addEventListener('blur', function() {    
+          el.setAttribute("contenteditable", false);
+          const text = el.outerHTML;
+          const id = el.getAttribute("id");
+          if (text && id) {
+            console.log('id:', id);
+            console.log('text:', text);
+            
+            fetch('http://localhost:3012/', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({text: text, id: id})
+            }).then(res=>res.json())
+              .then(res => console.log(res));
+          } else {
+            console.log('not data');
+            
+          }
+            
+        }, false);
+      });
+
+    
+    </script>
+  </body></html>
