@@ -18,7 +18,7 @@ http.createServer(function(req, res){
         const id = reqData.id;
         if (reqData && text && id) {
           fs.readFile("index.html", "utf8", function(error,data){
-            change = data.replace(getRegExp.getRegExp(id), text);
+            change = data.replace(getRegExp(id), text);
             fs.writeFile("index.html", change, function(error){ 
               console.log('writeFile - ok');
             });        
