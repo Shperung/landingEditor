@@ -1,6 +1,8 @@
 
 const http = require('http');
 const fs = require("fs");
+
+const getRegExp = require("./modules/getRegExp.js")
 const port = 3012;
 
 http.createServer(function(req, res){
@@ -16,8 +18,7 @@ http.createServer(function(req, res){
         const id = reqData.id;
         if (reqData && text && id) {
           fs.readFile("index.html", "utf8", function(error,data){
-            const re = new RegExp('<(\\w+)\\s[^>]*id=\\"'+id+'\\"[^>]*>[\\s\\S]*?\\1>', "gim");
-            change = data.replace(re, text);
+            change = data.replace(getRegExp.getRegExp(id), text);
             fs.writeFile("index.html", change, function(error){ 
               console.log('writeFile - ok');
             });        
