@@ -31,8 +31,7 @@
         textdasdasd</p>
     <br>
     <div id="editable_div" class="editable" contenteditable="false">
-     DIV 2
-    </div>
+     DIV 2zxsxcasxcascascas</div>
 
 
 
@@ -46,7 +45,7 @@
 
 
     <br>
-    <h3 id="editable5" class="editable" contenteditable="false">nav2</h3>
+    <h3 id="editable5" class="editable" contenteditable="false">nav2sxcscscs</h3>
     <p id="editable6" class="editable" contenteditable="false">Text 3g</p>
   
     <b id="editable_b" class="editable" contenteditable="false">bold teg<br>g<br>g<br>g<br>g<br>g<br>xt 1</b>
@@ -54,38 +53,43 @@
 
     <!-- <script src="src/client.js"></script> -->
     <script>
-      const editable = document.getElementsByClassName('editable');
 
-      // edit
-      [].forEach.call(editable, function (el) {
-        el.addEventListener('click', function() {    
-          el.setAttribute("contenteditable", true);
-          el.focus();    
-        }, false);
-        el.addEventListener('blur', function() {    
-          el.setAttribute("contenteditable", false);
-          const text = el.outerHTML;
-          const id = el.getAttribute("id");
-          if (text && id) {
-            console.log('id:', id);
-            console.log('text:', text);
-            
-            fetch('http://localhost:3012/', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({text: text, id: id})
-            }).then(res=>res.json())
-              .then(res => console.log(res));
-          } else {
-            console.log('not data');
-            
-          }
-            
-        }, false);
-      });
+      function editText(isEdit) {
+        if (isEdit) {
+          const editable = document.getElementsByClassName('editable');
+          // edit
+          [].forEach.call(editable, function (el) {
+            el.addEventListener('click', function() {    
+              el.setAttribute("contenteditable", true);
+              el.focus();    
+            }, false);
+            el.addEventListener('blur', function() {    
+              el.setAttribute("contenteditable", false);
+              const text = el.outerHTML;
+              const id = el.getAttribute("id");
+              if (text && id) {
+                console.log('id:', id);
+                console.log('text:', text);
+                
+                fetch('http://localhost:3012/', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({text: text, id: id})
+                }).then(res=>res.json())
+                  .then(res => console.log(res));
+              } else {
+                console.log('not data');
+                
+              }
+                
+            }, false);
+          });
+        }
+      }
+     
 
       // возвращает cookie с именем name, если есть, если нет, то undefined
       function getCookie(name) {
@@ -106,8 +110,6 @@
         editableBlock.className = "content-editable-block";
         editableBlock.innerHTML = `
         <button class="js--login-btn">login</button>
-        <button class="js--edit-on" hidden>Edit on</button>
-        <button class="js--edit-off" hidden>Edit off</button>
         <button class="js--logout-btn" hidden>logout</button>
         `;
         document.body.appendChild(editableBlock);
@@ -116,15 +118,13 @@
       // логинизация
       const isEditadle = getCookie('editable');
       console.log('isEditadle', isEditadle);
+      editText(isEditadle);
       
       const loginBtn = document.querySelector('.js--login-btn');
-      const editOn = document.querySelector('.js--edit-on');
-      const editOff = document.querySelector('.js--edit-off');
       const logoutBtn = document.querySelector('.js--logout-btn');
 
       if (isEditadle) {
         loginBtn.setAttribute("hidden", true);
-        editOn.removeAttribute("hidden");
         logoutBtn.removeAttribute("hidden");
       }
 
@@ -164,9 +164,9 @@
                 if (res.ok) {
                   console.log('res.ok');
                   loginBtn.setAttribute("hidden", true);
-                  editOn.removeAttribute("hidden");
                   logoutBtn.removeAttribute("hidden");
                   alert('Successed login');
+                  editText(true);
                 } else {
                   alert('Wrong username or password');
                 }
@@ -177,6 +177,6 @@
         });        
       }
      
-    
+      
     </script>
   </body></html>
