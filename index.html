@@ -3,12 +3,12 @@
     <title></title>
     <meta charset="UTF-8">
     <style>
-      .editable {
+      .editable.bordered {
         box-shadow: 0 0 0 1px #000;
         padding: 3px;
       }
 
-      .editable:focus {
+      .editable.bordered:focus {
         box-shadow: 0 0 0 2px green;
         padding: 3px;
       }
@@ -24,19 +24,19 @@
     <h2 id="editable3" class="editable" contenteditable="false">
             h2</h2>
     <br>  
-    <div id="editable_div1" class="editable" contenteditable="false">
-      DIV1fsdfsdfsdfg<div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
+    <div id="editable_div1" class="editable bordered" contenteditable="false">
+      DIV1fsdfsdfsdfg<div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
     <br>  
-    <p id="editable4" class="editable" contenteditable="false">
+    <p id="editable4" class="editable bordered" contenteditable="false">
         textdasdasd</p>
     <br>
-    <div id="editable_div" class="editable" contenteditable="false">
+    <div id="editable_div" class="editable bordered" contenteditable="false">
      DIV 2zxsxcasxcascascas</div>
 
 
 
 
-    <section id="editable_s" class="editable" contenteditable="false">
+    <section id="editable_s" class="editable bordered" contenteditable="false">
       <div>
         <p>jkj</p><p>ffczxc</p><p>f</p><p>fssc</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p><br></p>
       </div>
@@ -45,20 +45,21 @@
 
 
     <br>
-    <h3 id="editable5" class="editable" contenteditable="false">nav2sxcscscs</h3>
-    <p id="editable6" class="editable" contenteditable="false">Text 3g</p>
+    <h3 id="editable5" class="editable bordered" contenteditable="false">nav2sxcscscsscascasc</h3>
+    <p id="editable6" class="editable bordered" contenteditable="false">Text 3g</p>
   
-    <b id="editable_b" class="editable" contenteditable="false">bold teg<br>g<br>g<br>g<br>g<br>g<br>xt 1</b>
+    <b id="editable_b" class="editable bordered" contenteditable="false">bold teg<br>g<br>g<br>g<br>g<br>g<br>xt 15555555<br><br><br><br><br><br></b>
 
 
     <!-- <script src="src/client.js"></script> -->
     <script>
 
       function editText(isEdit) {
+        const editable = document.getElementsByClassName('editable');
         if (isEdit) {
-          const editable = document.getElementsByClassName('editable');
           // edit
           [].forEach.call(editable, function (el) {
+            el.classList.add("bordered");
             el.addEventListener('click', function() {    
               el.setAttribute("contenteditable", true);
               el.focus();    
@@ -86,6 +87,10 @@
               }
                 
             }, false);
+          });
+        } else {
+          [].forEach.call(editable, function (el) {
+            el.classList.remove("bordered");
           });
         }
       }
