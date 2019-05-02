@@ -18,14 +18,14 @@
 
   <body>
     <h1 id="editable1" class="editable" contenteditable="false">
-        h12</h1>
+        h]]</h1>
     <p id="editable2" class="editable" contenteditable="false">text 1</p>
    
     <h2 id="editable3" class="editable" contenteditable="false">
             h2</h2>
     <br>  
     <div id="editable_div1" class="editable" contenteditable="false">
-      DIV1fsdfsdfsdfg<div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
+      DIV1fsdfsdfsdfg<div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
     <br>  
     <p id="editable4" class="editable" contenteditable="false">
         textdasdasd</p>
@@ -56,6 +56,7 @@
     <script>
       const editable = document.getElementsByClassName('editable');
 
+      // edit
       [].forEach.call(editable, function (el) {
         el.addEventListener('click', function() {    
           el.setAttribute("contenteditable", true);
@@ -86,6 +87,84 @@
         }, false);
       });
 
+      // возвращает cookie с именем name, если есть, если нет, то undefined
+      function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+      }
+
+
+      // если на странице /editable то добавляем кнопки
+      const isEditadlePath = window.location.pathname === '/editable';
+      
+      if (isEditadlePath) {
+        console.log('isEditadlePath', isEditadlePath);
+        
+        const editableBlock = document.createElement('div');
+        editableBlock.className = "content-editable-block";
+        editableBlock.innerHTML = `
+        <button class="js--login-btn">login</button>
+        <button class="js--edit-on" hidden>Edit on</button>
+        <button class="js--edit-off" hidden>Edit off</button>
+        <button class="js--logout-btn" hidden>logout</button>
+        `;
+        document.body.appendChild(editableBlock);
+      }
+      
+      // логинизация
+      const isEditadle = getCookie('editable');
+      console.log('isEditadle', isEditadle);
+      
+      const loginBtn = document.querySelector('.js--login-btn');
+      const editOn = document.querySelector('.js--edit-on');
+      const editOff = document.querySelector('.js--edit-off');
+      const logoutBtn = document.querySelector('.js--logout-btn');
+
+      if (isEditadle) {
+        loginBtn.setAttribute("hidden", true);
+        editOn.removeAttribute("hidden");
+        logoutBtn.removeAttribute("hidden");
+      }
+
+
+
+      if (loginBtn && !isEditadle) {
+        console.log('loginBtn', loginBtn);
+        
+        loginBtn.addEventListener('click', function () {
+          const promptUserName = prompt("Enter user name", '');
+          if (promptUserName ){
+            const promptUserPassword =   prompt("Enter password", '');
+    
+            if(promptUserPassword) {
+              console.log('promptUserName', promptUserName);
+              console.log('promptUserPassword', promptUserPassword);    
+              fetch('http://localhost:3012/', {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json, text/plain, */*',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userName: promptUserName, userPassword: promptUserPassword})
+              }).then(res=> {
+                if (res.ok) {
+                  console.log('res.ok');
+                  loginBtn.setAttribute("hidden", true);
+                  editOn.removeAttribute("hidden");
+                  logoutBtn.removeAttribute("hidden");
+                  alert('Successed login');
+                } else {
+                  alert('Wrong username or password');
+                }
+              })
+                .then(res => console.log(res));        
+              }
+          }          
+        });        
+      }
+     
     
     </script>
   </body></html>
