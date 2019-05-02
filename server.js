@@ -43,7 +43,7 @@ server.on('request', function(req, res) {
         console.log('200');
         res.writeHead(200, {
           'Content-Type': 'text/html',
-          'Set-Cookie': 'editable=available',
+          'Set-Cookie':'editable=available; expires='+new Date(new Date().getTime()+86400000).toUTCString()
         }); 
       } else {
         console.log('400');
