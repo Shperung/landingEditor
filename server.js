@@ -1,18 +1,17 @@
 
 const http = require('http');
 const fs = require("fs");
+const crypto = require('crypto');
 
 const getRegExp = require("./modules/getRegExp.js")
 const port = 3012;
 const server = http.createServer();
 const userName = 'admin';
 const userPassword = '123';
-const token = "fsdfasdvdskvmsdg65sd64g6s2vs1cv5sd6";
-
+const token = crypto.randomBytes(16).toString('hex');
 
 server.on('request', function(req, res) {
   console.log('req.url', req.url);
-  const isEditablePath = req.url === '/editable';
 
   if(req.method == 'POST') {
     let jsonString = '';
