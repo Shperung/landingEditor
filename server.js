@@ -24,13 +24,16 @@ server.on('request', function(req, res) {
       console.log('reqData', reqData);
       const text = reqData.text;
       const id = reqData.id;
-      if (reqData && text && id) {
+      const dataToken = reqData.token;
+      if (reqData && text && id && dataToken && token === dataToken) {
         fs.readFile("index.html", "utf8", function(error,data){
           change = data.replace(getRegExp(id), text);
           fs.writeFile("index.html", change, function(error){ 
-            console.log('writeFile - ok');
+            res.writeHead(200, {"Content-Type": "application/json"});
+            console.log('writeFile - ok4');
           });        
         });
+        res.end();
       }
       
       if (reqData && reqData.userName && reqData.userPassword) {
@@ -47,7 +50,6 @@ server.on('request', function(req, res) {
           res.end();
         }
       }
-      console.log("post - editable"); 
     });
   } else {
     fs.readFile('index.html',function (err, data){

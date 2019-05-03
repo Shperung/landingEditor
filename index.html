@@ -31,25 +31,14 @@
 </head>
 
   <body>
-    <h1 id="editable1" class="editable" contenteditable="false">
-        h]]</h1>
-    <p id="editable2" class="editable" contenteditable="false">text 1</p>
+    <h1 id="editable1" class="editable bordered" contenteditable="false">
+        Heading 1</h1>
+    <p id="editable2" class="editable bordered" contenteditable="false">Text block 1</p>
    
     <h2 id="editable3" class="editable bordered" contenteditable="false">
-            h2dfsdfsdfsdf</h2>
-    <br>  
-    <div id="editable_div1" class="editable bordered" contenteditable="false">
-      DIV1fsdfsdfsdfg<div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
-    <br>  
-    <p id="editable4" class="editable bordered" contenteditable="false">
-        textdasdasdxsxsxxsxsxbdfbdb</p>
-    <br>
-    <div id="editable_div" class="editable bordered" contenteditable="false">
-     DIV 2zxsxcasxcascascasxsxsxsxsxs</div>
+            Heading 2</h2>
 
-
-
-
+   
     <section id="editable_s" class="editable bordered" contenteditable="false">
       <div>
         <p>jkj</p><p>ffczxc</p><p>f</p><p>fssc</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p>f</p><p><br></p>
@@ -82,14 +71,15 @@
               el.setAttribute("contenteditable", false);
               const text = el.outerHTML;
               const id = el.getAttribute("id");
-              if (text && id) {                
+              const token = getCookie('token');
+              if (text && id && token) {      
                 fetch('http://localhost:3012/', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({text: text, id: id})
+                  body: JSON.stringify({text: text, id: id, token: token})
                 }).then(res=> {
                   if (res.ok) {
                     console.log('text changed');
