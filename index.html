@@ -12,6 +12,20 @@
         box-shadow: 0 0 0 2px green;
         padding: 3px;
       }
+
+      .content-editable-block {
+        display: flex;
+        flex-direction: column;
+        width: 50px;
+        height: 100px;
+        background-color: #ccc;
+        padding: 5px;
+        justify-content: center;
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
     </style>
     
 </head>
@@ -21,17 +35,17 @@
         h]]</h1>
     <p id="editable2" class="editable" contenteditable="false">text 1</p>
    
-    <h2 id="editable3" class="editable" contenteditable="false">
-            h2</h2>
+    <h2 id="editable3" class="editable bordered" contenteditable="false">
+            h2dfsdfsdfsdf</h2>
     <br>  
     <div id="editable_div1" class="editable bordered" contenteditable="false">
-      DIV1fsdfsdfsdfg<div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
+      DIV1fsdfsdfsdfg<div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxcbfdbd</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>gdfbdfb</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>gxcxc</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>g</div><div>g</div><div>g</div><div>g</div><div>g</div></div>
     <br>  
     <p id="editable4" class="editable bordered" contenteditable="false">
-        textdasdasd</p>
+        textdasdasdxsxsxxsxsxbdfbdb</p>
     <br>
     <div id="editable_div" class="editable bordered" contenteditable="false">
-     DIV 2zxsxcasxcascascas</div>
+     DIV 2zxsxcasxcascascasxsxsxsxsxs</div>
 
 
 
@@ -45,8 +59,8 @@
 
 
     <br>
-    <h3 id="editable5" class="editable bordered" contenteditable="false">nav2sxcscscsscascasc</h3>
-    <p id="editable6" class="editable bordered" contenteditable="false">Text 3g</p>
+    <h3 id="editable5" class="editable bordered" contenteditable="false">nav2sxcscscsscascascewfxsdsdsdwedfasfasffwefwegfgfgfgfgfgaxa5554</h3>
+    <p id="editable6" class="editable bordered" contenteditable="false">Text 3gsxsx</p>
   
     <b id="editable_b" class="editable bordered" contenteditable="false">bold teg<br>g<br>g<br>g<br>g<br>g<br>xt 15555555<br><br><br><br><br><br></b>
 
@@ -68,10 +82,7 @@
               el.setAttribute("contenteditable", false);
               const text = el.outerHTML;
               const id = el.getAttribute("id");
-              if (text && id) {
-                console.log('id:', id);
-                console.log('text:', text);
-                
+              if (text && id) {                
                 fetch('http://localhost:3012/', {
                   method: 'POST',
                   headers: {
@@ -79,8 +90,12 @@
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({text: text, id: id})
-                }).then(res=>res.json())
-                  .then(res => console.log(res));
+                }).then(res=> {
+                  if (res.ok) {
+                    console.log('text changed');
+                  }
+                });
+
               } else {
                 console.log('not data');
                 
@@ -96,13 +111,7 @@
       }
      
 
-      // возвращает cookie с именем name, если есть, если нет, то undefined
-      function getCookie(name) {
-        var matches = document.cookie.match(new RegExp(
-          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-        ));
-        return matches ? decodeURIComponent(matches[1]) : undefined;
-      }
+      
 
 
       // если на странице /editable то добавляем кнопки
@@ -121,7 +130,16 @@
       }
       
       // логинизация
-      const isEditadle = getCookie('editable');
+
+      // возвращает cookie с именем name, если есть, если нет, то undefined
+      function getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+      }
+      
+      const isEditadle = getCookie('token');
       console.log('isEditadle', isEditadle);
       editText(isEditadle);
       
@@ -138,13 +156,12 @@
           if (document.cookie.length) {
             wantLogout = confirm("Do you want logout now?");
             if (wantLogout) {
-              document.cookie = 'editable=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+              document.cookie = 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
               document.location.reload(true);
             }
           }
         })
       }
-
 
 
       if (loginBtn && !isEditadle) {
@@ -153,31 +170,33 @@
         loginBtn.addEventListener('click', function () {
           const promptUserName = prompt("Enter user name", '');
           if (promptUserName ){
-            const promptUserPassword =   prompt("Enter password", '');
-    
+            const promptUserPassword =   prompt("Enter password", '');    
             if(promptUserPassword) {
-              console.log('promptUserName', promptUserName);
-              console.log('promptUserPassword', promptUserPassword);    
               fetch('http://localhost:3012/', {
-                method: 'POST',
-                headers: {
-                  'Accept': 'application/json, text/plain, */*',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({userName: promptUserName, userPassword: promptUserPassword})
-              }).then(res=> {
-                if (res.ok) {
-                  console.log('res.ok');
-                  loginBtn.setAttribute("hidden", true);
-                  logoutBtn.removeAttribute("hidden");
-                  alert('Successed login');
-                  editText(true);
-                } else {
-                  alert('Wrong username or password');
-                }
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({userName: promptUserName, userPassword: promptUserPassword})
               })
-                .then(res => console.log(res));        
-              }
+              .then(response => {
+                return response.json()
+              })
+              .then(data => {
+                console.log('data', data);
+                const date = new Date(new Date().getTime() + 86400000);
+                document.cookie = `token=${data.token}; expires=${date.toUTCString()}`;
+                loginBtn.setAttribute("hidden", true);
+                logoutBtn.removeAttribute("hidden");
+                alert('Successed login');
+                editText(true);                
+              })
+              .catch(err => {
+                console.log('err', err)
+                alert('Wrong username or password');
+              })
+            }
           }          
         });        
       }
