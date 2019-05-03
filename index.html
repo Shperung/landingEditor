@@ -49,9 +49,32 @@
 
     <br>
     <h3 id="editable5" class="editable bordered" contenteditable="false">Heading 3</h3>
-    <p id="editable6" class="editable bordered" contenteditable="false">Text 3gsxsx</p>
+    <p id="editable6" class="editable bordered" contenteditable="false">Text block 3</p>
   
-    <b id="editable_b" class="editable bordered" contenteditable="false">bold teg<br>g<br>g<br>g<br>g<br>g<br>xt 15555555<br><br><br><br><br><br></b>
+    <br>
+
+    <div id="div1" class="editable bordered" contenteditable="false">text 4</div><br></div></div>
+
+    <br>
+
+    <div id="div2" class="editable bordered" contenteditable="false">
+      Div2
+    </div>
+
+
+    <br>
+
+    <div id="div3" class="editable bordered">
+      Div3
+    </div>
+
+
+    <br>
+
+    <div id="div4" class="editable bordered" contenteditable="false">
+      Div4
+    </div>
+
 
 
     <!-- <script src="src/client.js"></script> -->
@@ -88,7 +111,8 @@
 
               } else {
                 console.log('not data');
-                
+                alert("Your changes have not been saved, try again");
+                document.location.reload(true);
               }
                 
             }, false);

@@ -8,7 +8,8 @@ const port = 3012;
 const server = http.createServer();
 const userName = 'admin';
 const userPassword = '123';
-const token = crypto.randomBytes(16).toString('hex');
+
+let token = {}
 
 server.on('request', function(req, res) {
   console.log('req.url', req.url);
@@ -24,28 +25,43 @@ server.on('request', function(req, res) {
       const text = reqData.text;
       const id = reqData.id;
       const dataToken = reqData.token;
-      if (reqData && text && id && dataToken && token === dataToken) {
-        fs.readFile("index.html", "utf8", function(error,data){
-          change = data.replace(getRegExp(id), text);
-          fs.writeFile("index.html", change, function(error){ 
-            res.writeHead(200, {"Content-Type": "application/json"});
-            console.log('writeFile - ok4');
-          });        
-        });
-        res.end();
+      if (reqData && text && id && dataToken && token.unigue && token.unigue === dataToken) {
+        if (token.date && token.date > Date.now()) {
+          fs.readFile("index.html", "utf8", function(error,data){
+            change = data.replace(getRegExp(id), text);
+            fs.writeFile("index.html", change, function(error){ 
+              res.writeHead(200, {"Content-Type": "application/json"});
+              console.log('writeFile - ok');
+            });        
+          });
+          res.end();
+        } else {
+          console.log('writeFile - ne ok');
+          res.writeHead(400, {
+            "Content-Type": "application/json",
+            'Set-Cookie': 'token=;expires=Thu, 01 Jan 1970 00:00:01 GMT;',
+          });
+          res.end();
+        }
       }
       
       if (reqData && reqData.userName && reqData.userPassword) {
         if (reqData.userName === userName && reqData.userPassword === userPassword) {
           console.log('200');
           res.writeHead(200, {"Content-Type": "application/json"});
+          token = {
+            unigue: crypto.randomBytes(16).toString('hex'),
+            date: Date.now() + 86400000,
+          }
           const json = JSON.stringify({ 
-            token: token, 
+            token: token.unigue, 
           });
           res.end(json);
         } else {
           console.log('400');
-          res.writeHead(400, {"Content-Type": "application/json"});
+          res.writeHead(400, {
+            "Content-Type": "application/json",
+          });
           res.end();
         }
       }
