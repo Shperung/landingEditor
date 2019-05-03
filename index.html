@@ -53,26 +53,25 @@
   
     <br>
 
-    <div id="div1" class="editable bordered" contenteditable="false">text 4</div><br></div></div>
+    <div id="div1" class="editable bordered" contenteditable="false">text block 4</div><br></div></div>
 
     <br>
 
     <div id="div2" class="editable bordered" contenteditable="false">
-      Div2
-    </div>
+      Div block 2</div>
 
 
     <br>
 
-    <div id="div3" class="editable bordered">
-      Div3
+    <div id="div3" class="editable bordered" contenteditable="false">
+      Div 3
     </div>
 
 
     <br>
 
     <div id="div4" class="editable bordered" contenteditable="false">
-      Div4
+      Div 4
     </div>
 
 
@@ -92,17 +91,17 @@
             }, false);
             el.addEventListener('blur', function() {    
               el.setAttribute("contenteditable", false);
-              const text = el.outerHTML;
+              const editedOuterHTML = el.outerHTML;
               const id = el.getAttribute("id");
               const token = getCookie('token');
-              if (text && id && token) {      
-                fetch('http://localhost:3012/', {
+              if (token && id && editedOuterHTML) {      
+                fetch('/', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json, text/plain, */*',
                     'Content-Type': 'application/json'
                   },
-                  body: JSON.stringify({text: text, id: id, token: token})
+                  body: JSON.stringify({editedOuterHTML: editedOuterHTML, id: id, token: token})
                 }).then(res=> {
                   if (res.ok) {
                     console.log('text changed');
@@ -143,9 +142,7 @@
         document.body.appendChild(editableBlock);
       }
       
-      // логинизация
 
-      // возвращает cookie с именем name, если есть, если нет, то undefined
       function getCookie(name) {
         var matches = document.cookie.match(new RegExp(
           "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -186,7 +183,7 @@
           if (promptUserName ){
             const promptUserPassword =   prompt("Enter password", '');    
             if(promptUserPassword) {
-              fetch('http://localhost:3012/', {
+              fetch('/', {
                   method: 'POST',
                   headers: {
                     'Accept': 'application/json, text/plain, */*',
